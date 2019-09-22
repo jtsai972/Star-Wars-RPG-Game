@@ -1,0 +1,78 @@
+* {
+    box-sizing: border-box;
+    transition: all 0.5s ease;
+}
+
+body {
+    background: #006080 url("../images/sw-fighter-bg.jpg") center/cover;
+    color: white;
+    display: flex;
+        flex-direction: column;
+    font-family: 'Roboto', sans-serif;
+    font-size: 100%;
+    line-height: 1.6em;
+    min-height: 100vh;
+    overflow: auto;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: bolder;
+    line-height: 1em;
+    margin: 1em auto;
+    width: 100%;
+}
+    
+    h1 { font-size: 2.5em; }
+    h2 { font-size: 2em; margin-top: 0; }
+    h3 {font-size: 1.5em; }
+
+p { margin: 1em auto;}
+
+header h1, 
+article, 
+footer p {
+    margin: 0 auto;
+    width: 90%;
+    max-width: 960px;
+}
+header, article, footer {
+    padding: 2em;
+}
+
+header, footer {
+    background: #222;
+    color: white;
+    border-color: #40dfff;
+    border-image: linear-gradient(to right, #33ccff 25%, #ff3355 75%);
+    border-image-slice: 1;
+    border-style: solid;
+}
+
+header {
+    border-bottom-width: 0.25em;
+}
+
+article {
+
+}
+
+footer {
+    border-top-width: 0.25em;
+    margin-top: auto;
+    text-align: center;
+}
+
+.panel {
+    background: rgba(255, 255, 255, 0.2);
+    display: flex;
+        align-content: flex-start;
+        flex-flow: row;
+    margin: 2em auto;
+    padding: 1em;
+}
+
+.characters {
+    padding: 1em;
+    width: 20%;
+}
