@@ -1,44 +1,49 @@
 var charPlayer = "", 
     charEnemy = "", 
     charNum = "",
-    charCurrent;
+    player = "",
+    enemy = "";
 var selPanel = "#player-selection";
-var selPlayer = true;
+var countAttack = 0;
 
-var playerOptions = {
+var charOptions = {
     char1: {
         name: "Obi Wan Kenobi",
         health: 120,
         attack: 8,
         counter: 10,
-        img: "assets/images/char1.jpg"
+        img: "assets/images/char1.jpg",
+        isAvailable: true
     },
     char2: {
         name: "Luke Skywalker",
         health: 100,
         attack: 4,
         counter: 5,
-        img: "assets/images/char2.jpg"
+        img: "assets/images/char2.jpg",
+        isAvailable: true
     },
     char3: {
         name: "Darth Sidius",
         health: 150,
         attack: 16,
         counter: 20,
-        img: "assets/images/char3.jpg"
+        img: "assets/images/char3.jpg",
+        isAvailable: true
     },
     char4: {
         name: "Darth Maul",
         health: 180,
         attack: 20,
         counter: 25,
-        img: "assets/images/char4.jpg"
+        img: "assets/images/char4.jpg",
+        isAvailable: true
     }
 };
 
-//console.log(playerOptions.char1.health);
+//console.log(charOptions.char1.health);
 
-var countChars = Object.keys(playerOptions).length;
+var countChars = Object.keys(charOptions).length;
 //console.log(countChars);
 
 charGen();
@@ -61,9 +66,9 @@ function printChar() {
             .attr('id', charNum)
             .addClass('character')
             .append(
-                $("<h3>").text(playerOptions[charNum].name),
-                $("<img>").attr('src', playerOptions[charNum].img),
-                $("<p>").text("Health: " + playerOptions[charNum].health)
+                $("<h3>").text(charOptions[charNum].name),
+                $("<img>").attr('src', charOptions[charNum].img),
+                $("<p>").text("Health: " + charOptions[charNum].health)
             )
     );
 }
@@ -83,10 +88,24 @@ function battleGen() {
     printChar();
 }
 
+function logCombat() {
+    console.log("logging combat");
+
+    $("#log .panel-content").prepend(
+        $("<div class='combat'>").prepend(
+            $("<p>")
+                .text(`You attacked ${enemy.name} for ${player.attack} damage`),
+            $("<p>")
+                .text(`${enemy.name} attacked you for ${enemy.attack} damage`)
+        )
+    );
+}
+
 $(document).ready( function() {
 
     $("#player-selection").on("click", ".character", function() {
         charPlayer = this.id;
+        player = charOptions[charPlayer];
         console.log("Player Character: " + charPlayer);
 
         $(selPanel).addClass("hide");
@@ -102,6 +121,7 @@ $(document).ready( function() {
 
     $("#enemy-selection").on("click", ".character", function() {
         charEnemy = this.id;
+        enemy = charOptions[charEnemy];
         console.log("Enemy Character: " + charEnemy);
 
         $(selPanel).addClass("hide");
@@ -116,8 +136,15 @@ $(document).ready( function() {
     });
 
     $("#battle").on("click", "#attack", function() {
-        console.log("attack!");
+        //console.log("attack!");
         $("#log").removeClass("hide");
+
+        countAttack++;
+
+        player.attack *= countAttack;
+        console.log("Player attack: " + player.attack);
+
+        logCombat();
     });
 
 });
