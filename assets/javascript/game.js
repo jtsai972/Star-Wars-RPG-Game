@@ -1,10 +1,13 @@
 var charPlayer = "", 
     charEnemy = "", 
     charNum = "",
+    charType = "",
     player = "",
     enemy = "";
 var selPanel = "#player-selection";
 var countAttack = 0;
+var victory = false,
+    loss = false;
 
 var charOptions = {
     char1: {
@@ -41,7 +44,7 @@ var charOptions = {
     }
 };
 
-//console.log(charOptions.char1.health);
+//console.log(charOptions.char1.health); //making sure stuff works
 
 var countChars = Object.keys(charOptions).length;
 //console.log(countChars);
@@ -75,34 +78,60 @@ function printChar() {
     }
 }
 
-//set up battle
-function battleGen() {
+function printBattle(charNum) {
+    $(selPanel + " .panel-content figure" + charType)
+        .attr('id', charNum)
+        .addClass('character')
+        .append(
+            $("<h3>").text(charOptions[charNum].name),
+            $("<img>").attr('src', charOptions[charNum].img),
+            $("<p class='health'>").text("Health: " + charOptions[charNum].health)
+        );
+    console.log("Print battle");
+}
+
+function newPlayer() {
+    selPanel = "#battle";
     charNum = charPlayer;
-    printChar();
+    charType = "#player";
+    printBattle(charNum);
     $("#" +charNum + " .health").attr("id", "player-health");
+    console.log("print player")
+}
 
-    $("#battle .panel-content").append(
-        $("<button>")
-            .attr('id', "attack")
-            .text("Attack")
-    );
-
+function newEnemy() {
     charNum = charEnemy;
-    printChar();
+    charType = "#enemy";
+    printBattle(charNum);
     $("#" +charNum + " .health").attr("id", "enemy-health");
+    console.log("print enemy")
 }
 
 function logCombat() {
     console.log("logging combat");
 
-    $("#log .panel-content").prepend(
-        $("<div class='combat'>").prepend(
-            $("<p>")
-                .text(`You attacked ${enemy.name} for ${player.attack} damage`),
-            $("<p>")
-                .text(`${enemy.name} attacked you for ${enemy.attack} damage`)
-        )
-    );
+    if (victory === true) {
+        $("#log .panel-content").prepend(
+            $("<div class='combat'>").prepend(
+                $("<p>").text(`You won! Pick a new enemy`)
+            )
+        );
+    } else if (loss === true) {
+        $("#log .panel-content").prepend(
+            $("<div class='combat'>").prepend(
+                $("<p>").text(`You were defeated. Pick a new character`)
+            )
+        );
+    }else {
+        $("#log .panel-content").prepend(
+            $("<div class='combat'>").prepend(
+                $("<p>")
+                    .text(`You attacked ${enemy.name} for ${player.attack * countAttack} damage`),
+                $("<p>")
+                    .text(`${enemy.name} attacked you for ${enemy.attack} damage`)
+            )
+        );
+    }    
 }
 
 function printHealth() {
@@ -125,12 +154,20 @@ $(document).ready( function() {
         $(selPanel).addClass("hide");
         //console.log(selPanel);
 
+        //print character in battlezone
+        charNum = charPlayer;
+        console.log(charNum);
+        newPlayer();
+
         selPanel = "#enemy-selection";
 
         $(selPanel).removeClass("hide");
         //console.log(selPanel);
         
+        //print characters in enemy selection
         charGen();
+
+        
     });
 
     $("#enemy-selection").on("click", ".character", function() {
@@ -138,19 +175,20 @@ $(document).ready( function() {
         enemy = charOptions[charEnemy];
         console.log("Enemy Character: " + charEnemy);
 
+        victory = false;
         enemy.isAvailable = false;
 
         selPanel = "#enemy-selection";
 
         $(selPanel).addClass("hide");
         //console.log(selPanel);
-
+        charNum = charEnemy;
+        console.log(charNum);
         selPanel = "#battle";
+        newEnemy();
 
         $(selPanel).removeClass("hide");
         //console.log(selPanel);
-
-        battleGen();
     });
 
     $("#battle").on("click", "#attack", function() {
@@ -158,27 +196,33 @@ $(document).ready( function() {
         $("#log").removeClass("hide");
 
         countAttack++;
+        console.log("Attack: " + countAttack);
 
-        player.attack *= countAttack;
-        console.log("Player attack: " + player.attack);
+        /* player.attack * countAttack;
+        console.log("Player attack: " + player.attack); */
 
         //set health
         player.health -= enemy.counter;
-        enemy.health -= player.attack;
+        enemy.health -= (player.attack * countAttack);
 
         if(player.health <= 0) {
+            loss = true;
             //newGame();
-        }
+        } 
         if(enemy.health <= 0) {
+            victory = true;
             //newEnemy
             $("#enemy-selection").find("#"+charEnemy).remove();
             $("#enemy-selection").removeClass("hide");
 
-            //$("#battle").find("#" + charEnemy).remove();
-            $("#battle .panel-content").empty();
+            $("#battle").find("#" + charEnemy).empty();
+            $("#log").find(".combat").remove();
+            //$("#battle .panel-content").empty();
 
-        }
+            countAttack = 0;
 
+        } 
+        
         printHealth();
         logCombat();
     });
