@@ -1,4 +1,8 @@
-var playerObj = {};
+var charPlayer, charEnemy, charNum;
+var selPanel = "#player-selection";
+var selPlayer = true;
+
+charPlayer = charEnemy = charNum = "";
 
 var playerOptions = {
     char1: {
@@ -36,26 +40,33 @@ console.log(playerOptions.char1.health);
 var countChars = Object.keys(playerOptions).length;
 console.log(countChars);
 
+//set up character selections
 function charGen() {
     for(var i = 0; i< (countChars); i++) {
-        var charNum = ("char" + (i+1));
-        console.log(charNum);
+        charNum = ("char" + (i+1));
+        console.log("Character number: " + charNum);
 
-        $("#player-selection").append(
-            $("<figure/>")
-                .attr('id', charNum)
-                .addClass('character')
-                .append(
-                    $("<h3>").text(playerOptions[charNum].name),
-                    $("<img>").attr('src', playerOptions[charNum].img),
-                    $("<p>").text("Health: " + playerOptions[charNum].health)
-                )
-        );
+        if(charNum !== charPlayer) {
+            printChar();
+        }
     }
 }
 
-function playerGen() {
-    
+function printChar() {
+    $(selPanel + " .panel-content").append(
+        $("<figure/>")
+            .attr('id', charNum)
+            .addClass('character')
+            .append(
+                $("<h3>").text(playerOptions[charNum].name),
+                $("<img>").attr('src', playerOptions[charNum].img),
+                $("<p>").text("Health: " + playerOptions[charNum].health)
+            )
+    );
+}
+
+//set up battle
+function battleGen() {
 
 }
 
@@ -65,6 +76,29 @@ charGen();
 $(document).ready( function() {
 
     $("#player-selection .character").on("click", function() {
+        charPlayer = this.id;
+        console.log("Player Character: " + charPlayer);
 
+        $(selPanel).addClass("hide");
+
+        selPanel = "#enemy-selection";
+
+        $(selPanel).removeClass("hide");
+        
+        charGen();
     });
+
+    $("#player-selection .character").on("click", function() {
+        charEnemy = this.id;
+        console.log("Enemy Character: " + charEnemy);
+
+        $(selPanel).addClass("hide");
+
+        selPanel = "#battle";
+
+        $(selPanel).removeClass("hide");
+
+        charGen();
+    });
+
 });
