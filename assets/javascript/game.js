@@ -1,8 +1,9 @@
-var charPlayer, charEnemy, charNum;
+var charPlayer = "", 
+    charEnemy = "", 
+    charNum = "",
+    charCurrent;
 var selPanel = "#player-selection";
 var selPlayer = true;
-
-charPlayer = charEnemy = charNum = "";
 
 var playerOptions = {
     char1: {
@@ -35,16 +36,18 @@ var playerOptions = {
     }
 };
 
-console.log(playerOptions.char1.health);
+//console.log(playerOptions.char1.health);
 
 var countChars = Object.keys(playerOptions).length;
-console.log(countChars);
+//console.log(countChars);
+
+charGen();
 
 //set up character selections
 function charGen() {
     for(var i = 0; i< (countChars); i++) {
         charNum = ("char" + (i+1));
-        console.log("Character number: " + charNum);
+        //console.log("Character number: " + charNum);
 
         if(charNum !== charPlayer) {
             printChar();
@@ -67,38 +70,54 @@ function printChar() {
 
 //set up battle
 function battleGen() {
+    charNum = charPlayer;
+    printChar();
 
+    $("#battle .panel-content").append(
+        $("<button>")
+            .attr('id', "attack")
+            .text("Attack")
+    );
+
+    charNum = charEnemy;
+    printChar();
 }
-
-
-charGen();
 
 $(document).ready( function() {
 
-    $("#player-selection .character").on("click", function() {
+    $("#player-selection").on("click", ".character", function() {
         charPlayer = this.id;
         console.log("Player Character: " + charPlayer);
 
         $(selPanel).addClass("hide");
+        //console.log(selPanel);
 
         selPanel = "#enemy-selection";
 
         $(selPanel).removeClass("hide");
+        //console.log(selPanel);
         
         charGen();
     });
 
-    $("#player-selection .character").on("click", function() {
+    $("#enemy-selection").on("click", ".character", function() {
         charEnemy = this.id;
         console.log("Enemy Character: " + charEnemy);
 
         $(selPanel).addClass("hide");
+        //console.log(selPanel);
 
         selPanel = "#battle";
 
         $(selPanel).removeClass("hide");
+        //console.log(selPanel);
 
-        charGen();
+        battleGen();
+    });
+
+    $("#battle").on("click", "#attack", function() {
+        console.log("attack!");
+        $("#log").removeClass("hide");
     });
 
 });
