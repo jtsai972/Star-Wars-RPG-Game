@@ -116,7 +116,7 @@ footer {
 /* Log content */
     #log .panel-content { 
         display: block; 
-        height: 14em;
+        max-height: 14em;
         overflow-y: auto;
     }
         #log .combat {

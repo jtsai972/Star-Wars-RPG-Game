@@ -61,22 +61,25 @@ function charGen() {
 }
 
 function printChar() {
-    $(selPanel + " .panel-content").append(
-        $("<figure/>")
-            .attr('id', charNum)
-            .addClass('character')
-            .append(
-                $("<h3>").text(charOptions[charNum].name),
-                $("<img>").attr('src', charOptions[charNum].img),
-                $("<p>").text("Health: " + charOptions[charNum].health)
-            )
-    );
+    if(charOptions[charNum].isAvailable = true){
+        $(selPanel + " .panel-content").append(
+            $("<figure/>")
+                .attr('id', charNum)
+                .addClass('character')
+                .append(
+                    $("<h3>").text(charOptions[charNum].name),
+                    $("<img>").attr('src', charOptions[charNum].img),
+                    $("<p class='health'>").text("Health: " + charOptions[charNum].health)
+                )
+        );
+    }
 }
 
 //set up battle
 function battleGen() {
     charNum = charPlayer;
     printChar();
+    $("#" +charNum + " .health").attr("id", "player-health");
 
     $("#battle .panel-content").append(
         $("<button>")
@@ -86,6 +89,7 @@ function battleGen() {
 
     charNum = charEnemy;
     printChar();
+    $("#" +charNum + " .health").attr("id", "enemy-health");
 }
 
 function logCombat() {
@@ -101,12 +105,22 @@ function logCombat() {
     );
 }
 
+function printHealth() {
+    $("#player-health.health").text("Health: " + player.health);
+    $("#enemy-health.health").text("Health: " +enemy.health);
+
+    console.log("Player Health: " + player.health);
+    console.log("Enemy Health: " + enemy.health);
+}
+
 $(document).ready( function() {
 
     $("#player-selection").on("click", ".character", function() {
         charPlayer = this.id;
         player = charOptions[charPlayer];
         console.log("Player Character: " + charPlayer);
+
+        player.isAvailable = false;
 
         $(selPanel).addClass("hide");
         //console.log(selPanel);
@@ -123,6 +137,10 @@ $(document).ready( function() {
         charEnemy = this.id;
         enemy = charOptions[charEnemy];
         console.log("Enemy Character: " + charEnemy);
+
+        enemy.isAvailable = false;
+
+        selPanel = "#enemy-selection";
 
         $(selPanel).addClass("hide");
         //console.log(selPanel);
@@ -144,6 +162,24 @@ $(document).ready( function() {
         player.attack *= countAttack;
         console.log("Player attack: " + player.attack);
 
+        //set health
+        player.health -= enemy.counter;
+        enemy.health -= player.attack;
+
+        if(player.health <= 0) {
+            //newGame();
+        }
+        if(enemy.health <= 0) {
+            //newEnemy
+            $("#enemy-selection").find("#"+charEnemy).remove();
+            $("#enemy-selection").removeClass("hide");
+
+            //$("#battle").find("#" + charEnemy).remove();
+            $("#battle .panel-content").empty();
+
+        }
+
+        printHealth();
         logCombat();
     });
 
