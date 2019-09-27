@@ -75,19 +75,18 @@ footer {
                 align-content: flex-start;
                 flex-flow: row;
                 flex-wrap: wrap;
-                justify-content: space-between;
+                justify-content: flex-start;
         }
 
     /* Character stuff */
         .character {
             background: rgba(0,0,0,0.6);
-            flex-grow: 1;
+            flex: 1 auto 200px;
             margin: 0 0.5em;
             margin-top: 1em;
             padding: 1em;
             text-align: center;
             width: 23%;
-                min-width: 200px;
         }
             .character:hover { background: rgba(0,0,0,0.8)}
             .character h3 { margin-top: 0; }
@@ -97,6 +96,7 @@ footer {
 /* Battle Content */
     #battle .panel-content {
         align-items: center;
+        justify-content: space-between;
     }
         #battle .character {
             flex-grow: 0;
