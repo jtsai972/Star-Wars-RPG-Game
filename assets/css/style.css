@@ -62,7 +62,14 @@ footer {
     text-align: center;
 }
 /* Hiding content */
-    .hide, .panel.hide, .hide * { height: 0; padding: 0; margin: 0; overflow: hidden; }
+    .hide, .panel.hide, .hide * { 
+        height: 0; 
+        margin: 0; 
+        opacity: 0; 
+        overflow: hidden; 
+        padding: 0; 
+        transition: all ease 1s;
+    }
 
 /* Panel stuff */
     .panel {
@@ -116,13 +123,14 @@ footer {
 /* Log content */
     #log .panel-content { 
         display: block; 
-        max-height: 14em;
+        max-height: 14.1em;
         overflow-y: auto;
     }
         .combat {
             background: rgba(255, 255, 255, 0.5);
             color: black;
             margin-top: 1em;
+            margin-right: 1em;
             padding: 0.25em 1em;
         }
         .combat button { margin-top: 1em; }
