@@ -1,18 +1,4 @@
 //Variables
-    //String variables
-    var playerID = "", 
-        enemyID = "", 
-        charNum = "",
-        char = "",
-        player = "",
-        enemy = "",
-        logContent = "",
-        selPanel = "#player-selection";
-    //number variables
-    var countAttack = 0;
-    //booleans
-    var victory = false,
-        loss = false;
     //object
     var charOptions = {
         char1: {
@@ -56,145 +42,27 @@
             isAvailable: true
         }
     };
-
     var countChars = Object.keys(charOptions).length;
-
-//Initializing
-
-charGen();
-
-//set up character selections
-function charGen() {
-    for(var i = 0; i< (countChars); i++) {
-        charNum = ("char" + (i+1));
-        //console.log("Character number: " + charNum);
-
-        if(charOptions[charNum].isAvailable === true){
-            console.log("This character isAvailable: " + charNum)
-            printChar();
-        }
-    }
-}
-
-function printChar() {
-    $(selPanel + " .panel-content").append(
-        $("<figure/>")
-            .attr('id', charNum)
-            .addClass('character')
-            .append(
-                $("<h3>").text(charOptions[charNum].name),
-                $("<img>").attr('src', charOptions[charNum].img),
-                $("<p class='health'>").text("Health: " + charOptions[charNum].health)
-            )
-    );
-}
-
-function newPlayer() {
-    //show/hide sections
-        $("#player-selection").addClass("hide");
-        $("#enemy-selection").removeClass("hide");
-    //Print to battlezone
-    $("#battle #player")
-        .append(
-            $("<h3>").text(player.name),
-            $("<img>").attr('src', player.img),
-            $("<p class='health'>").text("Health: " + player.baseHealth)
-        )
-}
-
-function newEnemy() {
-    //set victory and loss
-        victory = false;
-        loss = false;
-    //show/hide panels
-        $("#enemy-selection").addClass("hide");
-        $("#battle").removeClass("hide");
-    // Print the battlezone
-    $("#battle #enemy")
-        .css("opacity", 1)
-        .append(
-            $("<h3>").text(enemy.name),
-            $("<img>").attr('src', enemy.img),
-            $("<p class='health'>").text("Health: " + enemy.baseHealth)
-        )
-}
-
-function updateHealth() {
-    if(loss === true) {
-        //resetting player attack and health
-        player.attack = player.baseAttack;
-        player.health = player.baseHealth;
-        //making player an available character to pick again
-        //player.isAvailable = true;
-    } else if(victory === true) {
-        //resetting enemy attack and health
-        enemy.attack = enemy.baseAttack;
-        enemy.health = enemy.baseHealth;
-    } else {
-        //logging health stats
-        $("#player .health").text(player.health);
-        $("#enemy .health").text(enemy.health);
-    }
-}
-
-function logCombat() {
-    if (loss === true) {
-        //thing isn't hiding, attempting temp fix
-        $("#enemy-selection").addClass("hide");
-        //If loss is true
-        logContent =
-            `<p>You lost!</p>
-            <button id="new-game">Try again?</button>`
-    } else if(victory === true) {
-        //If victory is true
-        logContent =
-            `<p>You won!</p>
-            <p>Choose another opponent!</p>`
-    } else {
-        //if still in combat
-        logContent = 
-            `<p>You attack ${enemy.name} for ${player.attack} damage</p>
-            <p>${enemy.name} attacks you for ${enemy.counter} damage</p>`
-    } 
-    //logging attacks to log
-    $("#log .panel-content")
-        .prepend(
-            $("<div class='combat'>")
-                .prepend(logContent)
-        );
-}
-
-function newGame() {
-    //setting victory or loss
-        victory = false;
-        loss = false;
-    //remove player and enemy IDs
-        playerID = "";
-        enemyID = "";
-    //make all characters available again
-        for(var i = 0; i< (countChars); i++) {
-            char = charOptions[("char" + (i+1))];
-            char.isAvailable = true;
-            char.health = char.baseHealth;
-            char.attack = char.baseAttack;
-        }
-    //empty panels
-        $("#enemy-selection").find(".panel-content").empty();
-        $("#battle").find("#player").empty();
-        $("#battle").find("#enemy").empty();
-    //set attacks back to 0
-        countAttack = 0;
-    //select Panel
+    //String variables
+    var playerID = "", 
+        enemyID = "", 
+        charNum = 0,
+        enemyNum = countChars,
+        char = "",
+        player = "",
+        enemy = "",
+        logContent = "",
         selPanel = "#player-selection";
-    //Show panel
-        $("#player-selection").removeClass("hide");
-    //hide other sections
-        $("#enemy-selection").addClass("hide");
-        $("#battle").addClass("hide");
-        $("#log").addClass("hide");
-}
+    //number variables
+    var countAttack = 0;
+    //booleans
+    var victory = false,
+        loss = false;
+
 
 $(document).ready( function() {
+    //Initializing
+    charGen();
 
     //Selecting player character
     $("#player-selection").on("click", ".character", function() {
@@ -272,3 +140,160 @@ $(document).ready( function() {
     });
 
 });
+
+
+//set up character selections
+function charGen() {
+    for(var i = 0; i< (countChars); i++) {
+        charNum = ("char" + (i+1));
+        //console.log("Character number: " + charNum);
+
+        if(charOptions[charNum].isAvailable === true){
+            console.log("This character isAvailable: " + charNum)
+            printChar();
+        }
+    }
+}
+
+function printChar() {
+    $(selPanel + " .panel-content").append(
+        $("<figure/>")
+            .attr('id', charNum)
+            .addClass('character')
+            .append(
+                $("<h3>").text(charOptions[charNum].name),
+                $("<img>").attr('src', charOptions[charNum].img),
+                $("<p class='health'>").text("Health: " + charOptions[charNum].health)
+            )
+    );
+}
+
+function newPlayer() {
+    //show/hide sections
+        $("#player-selection").addClass("hide");
+        $("#enemy-selection").removeClass("hide");
+    //Print to battlezone
+    $("#battle #player")
+        .append(
+            $("<h3>").text(player.name),
+            $("<img>").attr('src', player.img),
+            $("<p class='health'>").text("Health: " + player.baseHealth)
+        )
+}
+
+function newEnemy() {
+    enemyNum--;
+    console.log(enemyNum);
+
+    if (enemyNum > 0) {
+        //set victory and loss
+            victory = false;
+            loss = false;
+        //show/hide panels
+            $("#enemy-selection").addClass("hide");
+            $("#battle").removeClass("hide");
+        // Print the battlezone
+        $("#battle #enemy")
+            .css("opacity", 1)
+            .append(
+                $("<h3>").text(enemy.name),
+                $("<img>").attr('src', enemy.img),
+                $("<p class='health'>").text("Health: " + enemy.baseHealth)
+            )
+    } else { 
+
+    }
+}
+
+function updateHealth() {
+    if(loss === true) {
+        //resetting player attack and health
+        player.attack = player.baseAttack;
+        player.health = player.baseHealth;
+        //making player an available character to pick again
+        //player.isAvailable = true;
+    } else if(victory === true) {
+        //resetting enemy attack and health
+        enemy.attack = enemy.baseAttack;
+        enemy.health = enemy.baseHealth;
+    } else {
+        //logging health stats
+        $("#player .health").text(player.health);
+        $("#enemy .health").text(enemy.health);
+    }
+}
+
+function logCombat() {
+    if (loss === true) {
+        //thing isn't hiding, attempting temp fix
+        $("#enemy-selection").addClass("hide");
+        //If loss is true
+        logContent =
+            `<div id="restart">
+                <p>You lost!</p>
+                <button id="new-game">Try again?</button>
+            </div>`
+    } else if(victory === true) {
+        //checking if there are still enemies left
+        if (enemyNum > 1) {
+            //If victory is true
+            logContent =
+            `<p>You won!</p>
+            <p>Choose another opponent!</p>`
+        } else {
+            //If all enemies defeated
+            $("#enemy-selection").addClass("hide");
+            $("#battle").addClass("hide");
+
+            logContent =
+            `<div id="restart">
+                <p>You won!</p>
+                <p>You have defeated all your opponents!</p>
+                <button id="new-game">Play again?</button>
+            </div>`;
+        }
+        
+    } else {
+        //if still in combat
+        logContent = 
+            `<p>You attack ${enemy.name} for ${player.attack} damage</p>
+            <p>${enemy.name} attacks you for ${enemy.counter} damage</p>`
+    }
+
+    //logging attacks to log
+    $("#log .panel-content")
+        .prepend(
+            $("<div class='combat'>")
+                .prepend(logContent)
+        );
+}
+function newGame() {
+    //setting victory or loss
+        victory = false;
+        loss = false;
+    //remove player and enemy IDs
+        playerID = "";
+        enemyID = "";
+        enemyNum = countChars;
+    //make all characters available again
+        for(var i = 0; i< (countChars); i++) {
+            char = charOptions[("char" + (i+1))];
+            char.isAvailable = true;
+            char.health = char.baseHealth;
+            char.attack = char.baseAttack;
+        }
+    //empty panels
+        $("#enemy-selection").find(".panel-content").empty();
+        $("#battle").find("#player").empty();
+        $("#battle").find("#enemy").empty();
+    //set attacks back to 0
+        countAttack = 0;
+    //select Panel
+        selPanel = "#player-selection";
+    //Show panel
+        $("#player-selection").removeClass("hide");
+    //hide other sections
+        $("#enemy-selection").addClass("hide");
+        $("#battle").addClass("hide");
+        $("#log").addClass("hide");
+}
