@@ -119,12 +119,14 @@ footer {
         max-height: 14em;
         overflow-y: auto;
     }
-        #log .combat {
+        .combat {
             background: rgba(255, 255, 255, 0.5);
             color: black;
             margin-top: 1em;
             padding: 0.25em 1em;
         }
+        .combat button { margin-top: 1em; }
+        #restart { padding: 1em 0; }
 
 @media (max-width: 1000px) {
     .character {
