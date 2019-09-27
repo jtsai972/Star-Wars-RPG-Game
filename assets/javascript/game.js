@@ -121,10 +121,9 @@ $(document).ready( function() {
             //Remove defeated enemy from enemy selection
                 $("#enemy-selection").find("#"+enemyID).remove();
                 $("#enemy-selection").removeClass("hide");
-            //Empty battlezone enemy and set opacity to 0
+            //Empty battlezone enemy and hide it
                 $("#battle").find("#enemy").empty();
-                $("#battle #enemy").css("opacity", 0);
-                $("#battle button").css("opacity", 0);
+                $("#battle").addClass("hide");
             //Remove combat log
                 $("#log").find(".panel-content").empty();
             //reset countAttack
@@ -194,9 +193,7 @@ function newEnemy() {
             $("#enemy-selection").addClass("hide");
             $("#battle").removeClass("hide");
         // Print the battlezone
-        $("#battle button").css("opacity", 1);
         $("#battle #enemy")
-            .css("opacity", 1)
             .append(
                 $("<h3>").text(enemy.name),
                 $("<img>").attr('src', enemy.img),
@@ -227,11 +224,9 @@ function updateHealth() {
 
 function logCombat() {
     if (loss === true) {
-        //thing isn't hiding, attempting temp fix
-        $("#enemy-selection").addClass("hide");
         //If loss is true
         logContent =
-            `<div id="restart">
+            `<div class="end">
                 <p>You lost!</p>
                 <button id="new-game">Try again?</button>
             </div>`
@@ -240,15 +235,17 @@ function logCombat() {
         if (enemyNum > 1) {
             //If victory is true
             logContent =
-            `<p>You won!</p>
-            <p>Choose another opponent!</p>`
+            `<div class="end">
+                <p>You won!</p>
+                <p>Choose another opponent!</p>
+            </div>`
         } else {
             //If all enemies defeated
             $("#enemy-selection").addClass("hide");
             $("#battle").addClass("hide");
 
             logContent =
-            `<div id="restart">
+            `<div class="end">
                 <p>You won!</p>
                 <p>You have defeated all your opponents!</p>
                 <button id="new-game">Play again?</button>

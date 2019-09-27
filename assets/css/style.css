@@ -134,7 +134,7 @@ footer {
             padding: 0.25em 1em;
         }
         .combat button { margin-top: 1em; }
-        #restart { padding: 1em 0; }
+        .end { padding: 1em 0; }
 
 @media (max-width: 1000px) {
     .character {
