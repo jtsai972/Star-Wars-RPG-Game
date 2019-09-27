@@ -124,6 +124,7 @@ $(document).ready( function() {
             //Empty battlezone enemy and set opacity to 0
                 $("#battle").find("#enemy").empty();
                 $("#battle #enemy").css("opacity", 0);
+                $("#battle button").css("opacity", 0);
             //Remove combat log
                 $("#log").find(".panel-content").empty();
             //reset countAttack
@@ -193,6 +194,7 @@ function newEnemy() {
             $("#enemy-selection").addClass("hide");
             $("#battle").removeClass("hide");
         // Print the battlezone
+        $("#battle button").css("opacity", 1);
         $("#battle #enemy")
             .css("opacity", 1)
             .append(
