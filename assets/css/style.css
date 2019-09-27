@@ -62,7 +62,7 @@ footer {
     text-align: center;
 }
 /* Hiding content */
-    .hide { display: none; }
+    .hide, .panel.hide, .hide * { height: 0; padding: 0; margin: 0; overflow: hidden; }
 
 /* Panel stuff */
     .panel {
